@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Parking Lot</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1> Jemzxc Parking Lot Management 🚗</h1>
+
+    <div class="form">
+        <input type="text" id="plateInput" placeholder="Enter License Plate">
+        <button onclick="addCar()">Park Car</button>
+    </div>
+
+    <h2>🅿️ Parking Slots</h2>
+    <div id="parkingLot" class="parking-grid"></div>
+</div>
+
+<script>
+    const TOTAL_SLOTS = 4;
+    const parkingLot = Array(TOTAL_SLOTS).fill(null);
+
+    function addCar() {
+        const plateInput = document.getElementById('plateInput');
+        const plate = plateInput.value.trim();
+
+        if (plate === '') {
+            alert('Please enter a license plate!');
+            return;
+        }
+
+        const emptyIndex = parkingLot.indexOf(null);
+        if (emptyIndex === -1) {
+            alert('🚫 Parking lot is full!');
+            return;
+        }
+
+        parkingLot[emptyIndex] = plate;
+        plateInput.value = '';
+        renderLot();
+    }
+
+    function removeCar(index) {
+        parkingLot[index] = null;
+        renderLot();
+    }
+
+    function renderLot() {
+        const lot = document.getElementById('parkingLot');
+        lot.innerHTML = '';
+
+        parkingLot.forEach((plate, index) => {
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            if (plate) {
+                slot.classList.add('occupied');
+                slot.innerHTML = `
+                    <div class="plate">${plate}</div>
+                    <button class="remove-btn" onclick="removeCar(${index})">Remove</button>
+                `;
+            } else {
+                slot.innerHTML = `Slot ${index + 1}`;
+            }
+            lot.appendChild(slot);
+        });
+    }
+
+    // Initial render
+    renderLot();
+
+</script>
+</body>
+</html>
